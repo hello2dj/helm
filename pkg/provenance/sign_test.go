@@ -22,7 +22,7 @@ import (
 	"strings"
 	"testing"
 
-	pgperrors "golang.org/x/crypto/openpgp/errors" //nolint
+	pgperrors "golang.org/x/crypto/openpgp/errors"
 )
 
 const (

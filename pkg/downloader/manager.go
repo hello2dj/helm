@@ -342,7 +342,7 @@ func (m *Manager) downloadAll(deps []*chart.Dependency) error {
 		}
 
 		version := ""
-		if registry.IsOCI(churl) {
+		if strings.HasPrefix(churl, "oci://") {
 			if !resolver.FeatureGateOCI.IsEnabled() {
 				return errors.Wrapf(resolver.FeatureGateOCI.Error(),
 					"the repository %s is an OCI registry", churl)
@@ -446,8 +446,7 @@ func (m *Manager) safeMoveDeps(deps []*chart.Dependency, source, dest string) er
 			fname := filepath.Join(dest, file.Name())
 			ch, err := loader.LoadFile(fname)
 			if err != nil {
-				fmt.Fprintf(m.Out, "Could not verify %s for deletion: %s (Skipping)\n", fname, err)
-				continue
+				fmt.Fprintf(m.Out, "Could not verify %s for deletion: %s (Skipping)", fname, err)
 			}
 			// local dependency - skip
 			if isLocalDependency[ch.Name()] {
@@ -477,7 +476,7 @@ func (m *Manager) hasAllRepos(deps []*chart.Dependency) error {
 Loop:
 	for _, dd := range deps {
 		// If repo is from local path or OCI, continue
-		if strings.HasPrefix(dd.Repository, "file://") || registry.IsOCI(dd.Repository) {
+		if strings.HasPrefix(dd.Repository, "file://") || strings.HasPrefix(dd.Repository, "oci://") {
 			continue
 		}
 
@@ -579,7 +578,7 @@ func (m *Manager) resolveRepoNames(deps []*chart.Dependency) (map[string]string,
 	for _, dd := range deps {
 		// Don't map the repository, we don't need to download chart from charts directory
 		// When OCI is used there is no Helm repository
-		if dd.Repository == "" || registry.IsOCI(dd.Repository) {
+		if dd.Repository == "" || strings.HasPrefix(dd.Repository, "oci://") {
 			continue
 		}
 		// if dep chart is from local path, verify the path is valid
@@ -595,7 +594,7 @@ func (m *Manager) resolveRepoNames(deps []*chart.Dependency) (map[string]string,
 			continue
 		}
 
-		if registry.IsOCI(dd.Repository) {
+		if strings.HasPrefix(dd.Repository, "oci://") {
 			reposMap[dd.Name] = dd.Repository
 			continue
 		}
@@ -709,7 +708,7 @@ func (m *Manager) parallelRepoUpdate(repos []*repo.Entry) error {
 //
 // If it finds a URL that is "relative", it will prepend the repoURL.
 func (m *Manager) findChartURL(name, version, repoURL string, repos map[string]*repo.ChartRepository) (url, username, password string, insecureskiptlsverify, passcredentialsall bool, caFile, certFile, keyFile string, err error) {
-	if registry.IsOCI(repoURL) {
+	if strings.HasPrefix(repoURL, "oci://") {
 		return fmt.Sprintf("%s/%s:%s", repoURL, name, version), "", "", false, false, "", "", "", nil
 	}
 

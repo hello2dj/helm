@@ -26,9 +26,9 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	"golang.org/x/crypto/openpgp"           //nolint
-	"golang.org/x/crypto/openpgp/clearsign" //nolint
-	"golang.org/x/crypto/openpgp/packet"    //nolint
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/clearsign"
+	"golang.org/x/crypto/openpgp/packet"
 	"sigs.k8s.io/yaml"
 
 	hapi "github.com/hello2dj/helm/v3/pkg/chart"
