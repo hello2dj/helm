@@ -32,12 +32,12 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	"github.com/hello2dj/helm/v3/internal/experimental/registry"
 	"github.com/hello2dj/helm/v3/pkg/chart"
 	"github.com/hello2dj/helm/v3/pkg/chartutil"
 	"github.com/hello2dj/helm/v3/pkg/engine"
 	"github.com/hello2dj/helm/v3/pkg/kube"
 	"github.com/hello2dj/helm/v3/pkg/postrender"
+	"github.com/hello2dj/helm/v3/pkg/registry"
 	"github.com/hello2dj/helm/v3/pkg/release"
 	"github.com/hello2dj/helm/v3/pkg/releaseutil"
 	"github.com/hello2dj/helm/v3/pkg/storage"
@@ -280,6 +280,7 @@ func (cfg *Configuration) getCapabilities() (*chartutil.Capabilities, error) {
 			Major:   kubeVersion.Major,
 			Minor:   kubeVersion.Minor,
 		},
+		HelmVersion: chartutil.DefaultCapabilities.HelmVersion,
 	}
 	return cfg.Capabilities, nil
 }

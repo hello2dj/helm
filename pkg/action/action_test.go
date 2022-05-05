@@ -18,15 +18,14 @@ package action
 import (
 	"flag"
 	"io/ioutil"
-	"os"
 	"testing"
 
 	fakeclientset "k8s.io/client-go/kubernetes/fake"
 
-	"github.com/hello2dj/helm/v3/internal/experimental/registry"
 	"github.com/hello2dj/helm/v3/pkg/chart"
 	"github.com/hello2dj/helm/v3/pkg/chartutil"
 	kubefake "github.com/hello2dj/helm/v3/pkg/kube/fake"
+	"github.com/hello2dj/helm/v3/pkg/registry"
 	"github.com/hello2dj/helm/v3/pkg/release"
 	"github.com/hello2dj/helm/v3/pkg/storage"
 	"github.com/hello2dj/helm/v3/pkg/storage/driver"
@@ -37,13 +36,6 @@ var verbose = flag.Bool("test.log", false, "enable test logging")
 
 func actionConfigFixture(t *testing.T) *Configuration {
 	t.Helper()
-
-	tdir, err := ioutil.TempDir("", "helm-action-test")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	t.Cleanup(func() { os.RemoveAll(tdir) })
 
 	registryClient, err := registry.NewClient()
 	if err != nil {

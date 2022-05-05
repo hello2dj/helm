@@ -25,11 +25,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/hello2dj/helm/v3/internal/experimental/registry"
 	"github.com/hello2dj/helm/v3/pkg/chartutil"
 	"github.com/hello2dj/helm/v3/pkg/cli"
 	"github.com/hello2dj/helm/v3/pkg/downloader"
 	"github.com/hello2dj/helm/v3/pkg/getter"
+	"github.com/hello2dj/helm/v3/pkg/registry"
 	"github.com/hello2dj/helm/v3/pkg/repo"
 )
 
@@ -87,18 +87,14 @@ func (p *Pull) Run(chartRef string) (string, error) {
 			getter.WithTLSClientConfig(p.CertFile, p.KeyFile, p.CaFile),
 			getter.WithInsecureSkipVerifyTLS(p.InsecureSkipTLSverify),
 		},
+		RegistryClient:   p.cfg.RegistryClient,
 		RepositoryConfig: p.Settings.RepositoryConfig,
 		RepositoryCache:  p.Settings.RepositoryCache,
 	}
 
 	if registry.IsOCI(chartRef) {
-		if p.Version == "" {
-			return out.String(), errors.Errorf("--version flag is explicitly required for OCI registries")
-		}
-
 		c.Options = append(c.Options,
-			getter.WithRegistryClient(p.cfg.RegistryClient),
-			getter.WithTagName(p.Version))
+			getter.WithRegistryClient(p.cfg.RegistryClient))
 	}
 
 	if p.Verify {

@@ -34,11 +34,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"sigs.k8s.io/yaml"
 
-	ociRegistry "github.com/hello2dj/helm/v3/internal/experimental/registry"
 	"github.com/hello2dj/helm/v3/internal/tlsutil"
 	"github.com/hello2dj/helm/v3/pkg/chart"
 	"github.com/hello2dj/helm/v3/pkg/chart/loader"
 	"github.com/hello2dj/helm/v3/pkg/chartutil"
+	ociRegistry "github.com/hello2dj/helm/v3/pkg/registry"
 	"github.com/hello2dj/helm/v3/pkg/repo"
 )
 
